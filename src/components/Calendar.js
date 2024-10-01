@@ -7,11 +7,17 @@ const Calendar = () => {
   const [dayRange, setDayRange] = useState(30); // Default to 30 days
   const [menuOpen, setMenuOpen] = useState(false); // Toggle for the menu bar
 
-  // On initial load, retrieve available dates from localStorage
+  // On initial load, retrieve available dates and day range from localStorage
   useEffect(() => {
     const storedDates = localStorage.getItem('availableDates');
+    const storedRange = localStorage.getItem('dayRange');
+    
     if (storedDates) {
       setAvailableDates(JSON.parse(storedDates));
+    }
+
+    if (storedRange) {
+      setDayRange(Number(storedRange));
     }
   }, []);
 
@@ -21,6 +27,11 @@ const Calendar = () => {
       localStorage.setItem('availableDates', JSON.stringify(availableDates));
     }
   }, [availableDates]);
+
+  // Persist day range to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('dayRange', dayRange);
+  }, [dayRange]);
 
   // Get today's date
   const today = new Date();
@@ -64,7 +75,7 @@ const Calendar = () => {
 
       {menuOpen && (
         <div className="menu-content">
-          <RangeSelector onRangeChange={handleRangeChange} />
+          <RangeSelector onRangeChange={handleRangeChange} dayRange={dayRange} />
           <button className="clear-button" onClick={clearAvailability}>
             Clear All Availability
           </button>
@@ -74,18 +85,26 @@ const Calendar = () => {
         </div>
       )}
 
+      <Legend /> {/* Add the simple legend */}
       <CalendarHeader />
       <CalendarGrid fullGridDays={fullGridDays} availableDates={availableDates} toggleAvailability={toggleAvailability} />
     </div>
   );
 };
 
+// Component for the legend that shows what the available color means
+const Legend = () => (
+  <div className="legend">
+    <span className="legend-item available"></span> Available
+  </div>
+);
+
 // Component for selecting the range of days to display
-const RangeSelector = ({ onRangeChange }) => (
+const RangeSelector = ({ onRangeChange, dayRange }) => (
   <div className="range-selector">
     <label>
       Select range of days:
-      <input type="number" min="1" max="90" onChange={onRangeChange} defaultValue={30} />
+      <input type="number" min="1" max="90" value={dayRange} onChange={onRangeChange} />
     </label>
   </div>
 );
