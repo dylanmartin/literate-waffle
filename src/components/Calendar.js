@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { generateCalendarDays } from '../utils/dataHelpers'
+import { generateCalendarDays } from '../utils/dateHelpers';
 import './Calendar.css';
 
 const Calendar = () => {
   const [availableDates, setAvailableDates] = useState([]);
-
   const [dayRange, setDayRange] = useState(30); // Default to 30 days
+  const [menuOpen, setMenuOpen] = useState(false); // Toggle for the menu bar
 
   // On initial load, retrieve available dates from localStorage
   useEffect(() => {
     const storedDates = localStorage.getItem('availableDates');
     if (storedDates) {
-      setAvailableDates(JSON.parse(storedDates)); // Parse stored dates and set to state
+      setAvailableDates(JSON.parse(storedDates));
     }
-  }, []); // This runs only once on component mount
+  }, []);
 
   // Persist available dates to localStorage whenever they change
   useEffect(() => {
     if (availableDates.length > 0) {
-      localStorage.setItem('availableDates', JSON.stringify(availableDates)); // Save as a JSON string
+      localStorage.setItem('availableDates', JSON.stringify(availableDates));
     }
   }, [availableDates]);
 
@@ -45,18 +45,34 @@ const Calendar = () => {
   // Clear all availability
   const clearAvailability = () => {
     setAvailableDates([]);
-    localStorage.removeItem('availableDates'); // Clear from localStorage
+    localStorage.removeItem('availableDates');
+  };
+
+  // Set all dates as available
+  const setAllAvailable = () => {
+    const allDates = fullGridDays.filter(day => day).map(day => day.toDateString());
+    setAvailableDates(allDates);
   };
 
   return (
     <div className="calendar-container">
-      <RangeSelector onRangeChange={handleRangeChange} />
-
-      <div className="actions">
-        <button className="clear-button" onClick={clearAvailability}>
-          Clear All Availability
+      <div className="menu-bar">
+        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? 'Hide Controls' : 'Show Controls'}
         </button>
       </div>
+
+      {menuOpen && (
+        <div className="menu-content">
+          <RangeSelector onRangeChange={handleRangeChange} />
+          <button className="clear-button" onClick={clearAvailability}>
+            Clear All Availability
+          </button>
+          <button className="set-available-button" onClick={setAllAvailable}>
+            Set All Dates as Available
+          </button>
+        </div>
+      )}
 
       <CalendarHeader />
       <CalendarGrid fullGridDays={fullGridDays} availableDates={availableDates} toggleAvailability={toggleAvailability} />

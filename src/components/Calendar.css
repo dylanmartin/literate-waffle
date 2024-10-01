@@ -7,13 +7,35 @@
     overflow-x: hidden;
   }
   
-  .range-selector {
-    margin-bottom: 20px;
+  .menu-bar {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .menu-toggle {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .menu-toggle:hover {
+    background-color: #0056b3;
+  }
+  
+  .menu-content {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
   
   .range-selector label {
     font-size: 14px;
-    margin-right: 10px;
   }
   
   .range-selector input {
@@ -21,14 +43,9 @@
     width: 60px;
   }
   
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-  }
-  
-  .clear-button {
-    background-color: #ff4d4d;
+  .clear-button,
+  .set-available-button {
+    background-color: #28a745;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -37,8 +54,16 @@
     font-size: 14px;
   }
   
+  .clear-button {
+    background-color: #dc3545;
+  }
+  
   .clear-button:hover {
-    background-color: #e04343;
+    background-color: #c82333;
+  }
+  
+  .set-available-button:hover {
+    background-color: #218838;
   }
   
   .calendar-header {
