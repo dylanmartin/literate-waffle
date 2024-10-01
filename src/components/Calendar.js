@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
-import { generateCalendarDays } from '../utils/dataHelpers';
+import React, { useState, useEffect } from 'react';
+import { generateCalendarDays } from '../utils/dataHelpers'
 import './Calendar.css';
 
 const Calendar = () => {
   const [availableDates, setAvailableDates] = useState([]);
+
   const [dayRange, setDayRange] = useState(30); // Default to 30 days
+
+  // On initial load, retrieve available dates from localStorage
+  useEffect(() => {
+    const storedDates = localStorage.getItem('availableDates');
+    if (storedDates) {
+      setAvailableDates(JSON.parse(storedDates)); // Parse stored dates and set to state
+    }
+  }, []); // This runs only once on component mount
+
+  // Persist available dates to localStorage whenever they change
+  useEffect(() => {
+    if (availableDates.length > 0) {
+      localStorage.setItem('availableDates', JSON.stringify(availableDates)); // Save as a JSON string
+    }
+  }, [availableDates]);
 
   // Get today's date
   const today = new Date();
@@ -26,9 +42,21 @@ const Calendar = () => {
     setDayRange(Number(e.target.value));
   };
 
+  // Clear all availability
+  const clearAvailability = () => {
+    setAvailableDates([]);
+    localStorage.removeItem('availableDates'); // Clear from localStorage
+  };
+
   return (
     <div className="calendar-container">
       <RangeSelector onRangeChange={handleRangeChange} />
+
+      <div className="actions">
+        <button className="clear-button" onClick={clearAvailability}>
+          Clear All Availability
+        </button>
+      </div>
 
       <CalendarHeader />
       <CalendarGrid fullGridDays={fullGridDays} availableDates={availableDates} toggleAvailability={toggleAvailability} />
