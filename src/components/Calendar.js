@@ -67,9 +67,9 @@ const Calendar = () => {
 
   return (
     <div className="calendar-container">
-      <div className="menu-bar">
-        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? 'Hide Controls' : 'Show Controls'}
+      <div className="sticky-header">
+        <button className="chevron-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? '▼' : '▶'}
         </button>
       </div>
 
@@ -85,19 +85,12 @@ const Calendar = () => {
         </div>
       )}
 
-      <Legend /> {/* Add the simple legend */}
       <CalendarHeader />
+      <Legend />
       <CalendarGrid fullGridDays={fullGridDays} availableDates={availableDates} toggleAvailability={toggleAvailability} />
     </div>
   );
 };
-
-// Component for the legend that shows what the available color means
-const Legend = () => (
-  <div className="legend">
-    <span className="legend-item available"></span> Available
-  </div>
-);
 
 // Component for selecting the range of days to display
 const RangeSelector = ({ onRangeChange, dayRange }) => (
@@ -106,6 +99,16 @@ const RangeSelector = ({ onRangeChange, dayRange }) => (
       Select range of days:
       <input type="number" min="1" max="90" value={dayRange} onChange={onRangeChange} />
     </label>
+  </div>
+);
+
+// Simple legend to indicate availability
+const Legend = () => (
+  <div className="legend">
+    <div className="legend-item">
+      <span className="legend-color available"></span>
+      <span>Available</span>
+    </div>
   </div>
 );
 
