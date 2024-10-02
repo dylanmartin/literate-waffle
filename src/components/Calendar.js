@@ -85,8 +85,8 @@ const Calendar = () => {
         </div>
       )}
 
-      <CalendarHeader />
       <Legend />
+      <CalendarHeader />
       <CalendarGrid fullGridDays={fullGridDays} availableDates={availableDates} toggleAvailability={toggleAvailability} />
     </div>
   );
